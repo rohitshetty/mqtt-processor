@@ -1,0 +1,20 @@
+{
+  "name": "mqtt-processor",
+  "version": "0.0.1",
+  "description": "mqtt processor for my iot experiments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "iot",
+    "nodejs",
+    "mqtt"
+  ],
+  "author": "rohit",
+  "license": "ISC",
+  "dependencies": {
+    "mqtt": "^2.0.1",
+    "url": "^0.11.0"
+  }
+}
