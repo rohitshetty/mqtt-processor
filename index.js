@@ -1,5 +1,7 @@
 var mqtt = require('mqtt'),
-    url = require('url');
+    url = require('url'),
+    Subscriber = require('./subscribers/subscribed.js')
+    subscribers = Subscriber.getSubscribers();
 
 var mqtt_url = url.parse(process.env.CLOUDMQTT_URL|| "mqtt://localhost:1883");
 
@@ -13,13 +15,24 @@ var options  = {
     username: auth[0],
     password: auth[1]
 };
-console.log(url, options)
 var client = mqtt.connect(url, options);
 
 client.on('connect', function () {
     console.log('connected to mqtt broker!');
+
+    for(topic in subscribers) {
+        client.subscribe(topic);
+        console.log('subscribed to ', topic);
+    }
+
+    client.publish('/all', 'mqtt-processor is up.');
+});
+
+
+client.on('message', function (topic, message) {
+    subscribers[topic](message);
 });
 
 client.on('error', function (err) {
     console.log(err);
-})
+});
