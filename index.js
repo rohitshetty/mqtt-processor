@@ -1,7 +1,7 @@
 var mqtt = require('mqtt'),
     url = require('url'),
-    Subscriber = require('./subscribers/subscribed.js')
-    subscribers = Subscriber.getSubscribers();
+    Topics = require('./subscriptions/topics-aggregator.js')
+    topics = Topics.getTopicsToBeSubscribed();
 
 var mqtt_url = url.parse(process.env.CLOUDMQTT_URL|| "mqtt://localhost:1883");
 
@@ -18,9 +18,8 @@ var options  = {
 var client = mqtt.connect(url, options);
 
 client.on('connect', function () {
-    console.log('connected to mqtt broker!');
-
-    for(topic in subscribers) {
+    //subscribe to the aggregated topics
+    for(topic in topics) {
         client.subscribe(topic);
         console.log('subscribed to ', topic);
     }
@@ -29,10 +28,11 @@ client.on('connect', function () {
 });
 
 
-client.on('message', function (topic, message) {
-    subscribers[topic](message);
+client.on('message', function (topicName, message) {
+    //call respective callbacks
+    topics[topicName](message);
 });
 
 client.on('error', function (err) {
-    console.log(err);
+    console.error(err);
 });

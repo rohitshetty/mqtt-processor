@@ -1,4 +1,5 @@
 exports['/database/esp8266/read'] = function (message) {
+    //TODO add NoSQL db
     console.log(message);
 };
 
