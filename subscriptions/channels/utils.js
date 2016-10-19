@@ -1,3 +1,4 @@
-exports['/all'] = function (message) {
-    console.log('Recived '+message);
-}
+'use strict';
+exports['/all'] = (message) => {
+	console.log(`Recived ${message}`);
+};
